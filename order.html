@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt món</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+            color: #f7f3ef;
+            background: linear-gradient(180deg, rgba(20,14,11,0.65), rgba(20,14,11,0.65)),
+                        url('../img/background.jpg') center center / cover no-repeat fixed;
+            line-height: 1.6;
+        }
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #3b2a22;
+            padding: 12px 0;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #f97316;
+        }
+        .logo img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #f97316;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+        nav ul li a {
+            color: #f7f3ef;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover {
+            color: #f97316;
+        }
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+        h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: #f97316;
+        }
+        section.menu, section.order {
+            background: rgba(0,0,0,0.3);
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid #3b2a22;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #3b2a22;
+        }
+        th {
+            background: rgba(59,42,34,0.3);
+            font-weight: 700;
+            color: #f97316;
+        }
+        td {
+            color: #d1c5bb;
+        }
+        button {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(249,115,22,0.4);
+        }
+        input[type="number"] {
+            width: 80px;
+            padding: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #3b2a22;
+            border-radius: 15px;
+            color: #f7f3ef;
+            font-size: 0.9rem;
+        }
+        input[type="text"] {
+            width: 140px;
+            padding: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #3b2a22;
+            border-radius: 15px;
+            color: #f7f3ef;
+            font-size: 0.9rem;
+        }
+        input[type="number"]::placeholder, input[type="text"]::placeholder {
+            color: #d1c5bb;
+        }
+        .order-total {
+            margin-top: 30px;
+            text-align: right;
+            color: #d1c5bb;
+            font-size: 1.1rem;
+        }
+        .order-total p {
+            margin: 10px 0;
+        }
+        .order-total button {
+            margin-left: 15px;
+        }
+        #message {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 500;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid #3b2a22;
+        }
+        .error {
+            background: rgba(248,215,218,0.8);
+            color: #721c24;
+        }
+        .success {
+            background: rgba(212,237,218,0.8);
+            color: #155724;
+        }
+        #receipt {
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid #3b2a22;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+        #receipt h3 {
+            font-size: 1.8rem;
+            color: #f97316;
+            margin-bottom: 20px;
+        }
+        #receipt table {
+            margin: 15px 0;
+        }
+        #receipt p {
+            color: #d1c5bb;
+        }
+        
+        /* Thêm vào khối <style> của bạn */
+        .receipt-area {
+            margin-top: 40px; /* Tạo khoảng cách với tổng tiền */
+            padding-top: 20px;
+            border-top: 1px dashed #3b2a22; /* Đường kẻ phân cách */
+            text-align: center; /* Đưa nút và hóa đơn vào giữa */
+        }
+
+        /* Đảm bảo nút "Tạo Hóa Đơn" có khoảng cách bên dưới */
+        #generate-receipt {
+            margin-bottom: 20px; 
+        }
+        #receipt-output {
+            max-width: 450px; 
+            margin-left: auto;
+            margin-right: auto;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #f97316;
+            padding: 25px;
+            border-radius: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            text-align: left;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: #f7f3ef;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.2); 
+            min-height: 100px; 
+            display: block;
+            justify-content: center;
+            align-items: center;
+        }
+        .receipt-area {
+            margin-top: 40px; 
+            padding-top: 20px;
+            border-top: 1px dashed #3b2a22; 
+            text-align: center; 
+        }
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+            main {
+                padding: 40px 20px;
+            }
+            section.menu, section.order {
+                padding: 20px;
+            }
+            table {
+                font-size: 0.9rem;
+            }
+            input[type="number"], input[type="text"] {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .order-total {
+                text-align: center;
+            }
+            .order-total button {
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <img src="../img/logo_nha_hang.png" alt="Logo nhà hàng">
+                <span id="restaurantName">Nhà hàng</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="homepage.html">Trang chủ</a></li>
+                    <li><a href="menu_management.html">Menu</a></li>
+                    <li><a href="#">Giới thiệu</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                    <li><a href="#">Đặt bàn</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="menu">
+            <h2>Chọn món</h2>
+            <table id="menu-items">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Tên món</th>
+                        <th>Giá</th>
+                        <th>Danh mục</th>
+                        <th>Số lượng</th>
+                        <th>Ghi chú</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="menuItems"></tbody>
+            </table>
+        </section>
+
+        <section class="order">
+            <h2>Đơn hàng của bạn</h2>
+            <table id="order-items">
+                <thead>
+                    <tr>
+                        <th>Tên món</th>
+                        <th>Số lượng</th>
+                        <th>Giá</th>
+                        <th>Tổng</th>
+                        <th>Ghi chú</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="orderItems"></tbody>
+            </table>
+            <div class="order-total">
+                <p>Tạm tính: <span id="subtotal">0₫</span></p>
+                <p>
+                    Giảm giá: <input type="number" id="discountInput" min="0" max="100" value="0">%
+                    <span id="discount-amount">0₫</span>
+                    <button id="apply-discount">Áp dụng</button>
+                </p>
+                <p>Thuế (10%): <span id="tax-amount">0₫</span></p>
+                <p><strong>Tổng cộng: <span id="total-amount">0₫</span></strong></p>
+            </div>
+            <div class="receipt-area">
+                <button id="generate-receipt">Tạo Hóa Đơn</button>
+                <pre id="receipt-output"></pre>
+            </div>
+        </section>
+    </main>
+
+
+    <script type="module">
+        import Restaurant from './Restaurant.js';
+        import Order from './Order.js';
+        import { MENU_ITEMS } from './data.js';
+
+        // Set restaurant name from localStorage
+        const restaurantName = localStorage.getItem('restaurantName') || 'Nhà hàng';
+        document.getElementById('restaurantName').textContent = restaurantName;
+
+        // Initialize menuItems from localStorage or fallback to imported data
+        const initialMenuItems = MENU_ITEMS;
+        let menuItems = JSON.parse(localStorage.getItem('menuItems')) || initialMenuItems;
+
+        // Load menu list
+        const menuItemsTbody = document.getElementById('menuItems');
+        function renderMenu() {
+            menuItemsTbody.innerHTML = '';
+            menuItems.forEach((item, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <img src="${item.imageUrl}" width="100" height="100">
+                    <td>${item.name}</td>
+                    <td>${item.price.toLocaleString()}₫</td>
+                    <td>${item.category}</td>
+                    <td><input type="number" min="1" value="1" style="width:60px"></td>
+                    <td><input type="text" placeholder="Ghi chú"></td>
+                    <td><button class="add-btn" data-idx="${idx}">Thêm</button></td>
+                `;
+            menuItemsTbody.appendChild(tr);
+            });
+        }
+        renderMenu();
+
+        // create order
+        const order = new Order(Date.now(), 1);
+
+        // add menu_item to order 
+        menuItemsTbody.addEventListener('click', function(e) {  
+            if (e.target.classList.contains('add-btn')) {
+                const tr = e.target.closest('tr');
+                const idx = Number(e.target.dataset.idx); // Lấy đúng data-idx
+                const item = { ...menuItems[idx], idx }; // Gắn idx vào item
+                const qty = Number(tr.querySelector('input[type="number"]').value) || 1;
+                const note = tr.querySelector('input[type="text"]').value || '';
+                order.addItem(item, qty, note);
+                renderOrder();
+            }
+        });
+
+        // print order
+        const orderItemsTbody = document.getElementById('orderItems');
+        function renderOrder() {
+            orderItemsTbody.innerHTML = '';
+            order.items.forEach(line => {
+                const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                    <td>${line.menuItem.name}</td>
+                    <td>
+                        <input type="number" min="1" value="${line.quantity}" style="width:60px" data-idx="${line.menuItem.idx}" class="qty-input">
+                    </td>
+                    <td>${line.menuItem.price.toLocaleString()}₫</td>
+                    <td>${(line.menuItem.price * line.quantity).toLocaleString()}₫</td>
+                    <td>${line.note || ''}</td>
+                    <td>
+                        <button class="remove-btn" data-idx="${line.menuItem.idx}">Xóa</button>
+                    </td>
+                    `;
+                orderItemsTbody.appendChild(tr);
+            });
+            updateTotals();
+        }        
+
+        // Remove menu_item 
+        
+        orderItemsTbody.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-btn')) {
+                const idx = Number(e.target.dataset.idx);
+                order.removeItem(idx, order.items.find(i => i.menuItem.idx === idx)?.quantity || 1);
+                renderOrder();
+            }
+        });
+        orderItemsTbody.addEventListener('change', function(e) {
+            if (e.target.classList.contains('qty-input')) {
+                const idx = Number(e.target.dataset.idx);
+                const newQty = Number(e.target.value);
+                order.updateItemQuantity(idx, newQty);
+                renderOrder();
+            }
+        });
+
+        function applyDiscount() {
+            const discountValue = Number(document.getElementById('discountInput').value) || 0;
+            order.applyDiscount(discountValue);
+            renderOrder();
+        }
+
+        // Event for "Áp Dụng" btn
+        document.getElementById('apply-discount').addEventListener('click', applyDiscount);
+        // Total
+        function updateTotals() {
+            document.getElementById('subtotal').textContent = order.getSubtotal().toLocaleString() + '₫';
+            document.getElementById('discount-amount').textContent = '-' + order.getDiscountAmount().toLocaleString() + '₫';
+            document.getElementById('tax-amount').textContent = '+' + order.getTaxAmount().toLocaleString() + '₫';
+            document.getElementById('total-amount').textContent = order.getTotal().toLocaleString() + '₫';
+        }
+
+        // Event for "Tạo hóa đơn"
+        const receiptOutput = document.getElementById('receipt-output');
+        const button = document.getElementById('generate-receipt');
+        console.log(button);
+        button.addEventListener('click', function(){
+            const receiptString = order.generateReceipt();
+            receiptOutput.textContent = receiptString; 
+            
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            color: #f7f3ef;
+            background: linear-gradient(180deg, rgba(20,14,11,0.65), rgba(20,14,11,0.65)),
+                        url('../img/background.jpg') center center / cover no-repeat fixed;
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .brand {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+        }
+        .brand img {
+            height: 70px;
+            width: 70px;
+            border-radius: 50%;
+            display: block;
+            object-fit: cover;
+            border: 1px solid #3b2a22;
+        }
+        .container {
+            width: 100%;
+            max-width: 720px;
+            background: rgba(0,0,0,0.25);
+            border: 1px solid #3b2a22;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+            padding: 28px;
+            text-align: center;
+            backdrop-filter: blur(6px);
+        }
+        h1 { margin: 0 0 10px; font-size: 28px; letter-spacing: .3px; }
+        p.subtitle { margin: 0 0 22px; color: #d1c5bb; }
+        a.button {
+            display: inline-block;
+            background: linear-gradient(180deg, #f97316, #ea580c);
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: transform .04s ease, filter .2s ease;
+        }
+        a.button:hover { filter: brightness(1.05); }
+        a.button:active { transform: translateY(1px); }
+    </style>
+    </head>
+<body>
+    <a href="./index.html" class="brand" aria-label="Trang chủ">
+        <img src="../img/logo_nha_hang.png" alt="Logo nhà hàng">
+    </a>
+    <div class="container">
+        <h1>Hệ thống quản lý nhà hàng</h1>
+        <p class="subtitle">Bắt đầu bằng cách đăng ký thông tin nhà hàng của bạn.</p>
+        <a class="button" href="./register.html">Đăng ký nhà hàng</a>
+    </div>
+</body>
+</html>

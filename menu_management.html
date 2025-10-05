@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Menu</title>
+    <style>
+        /* === CSS TỪ HOMEPAGE.HTML ĐỂ ĐẢM BẢO STYLE NHẤT QUÁN === */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+            color: #f7f3ef;
+            /* Thay background.jpg bằng màu nền hoặc placeholder nếu ảnh không có */
+           background: linear-gradient(180deg, rgba(20,14,11,0.65), rgba(20,14,11,0.65)),
+                        url('../img/background.jpg') center center / cover no-repeat fixed;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+            border-bottom: 1px solid #3b2a22;
+            padding: 12px 0;
+        }
+        
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        
+        .logo {
+            display: flex; align-items: center; gap: 12px;
+            font-size: 24px; font-weight: 700; color: #f97316;
+        }
+        
+        .logo img {
+            width: 50px; height: 50px; border-radius: 50%;
+            object-fit: cover; border: 2px solid #f97316;
+        }
+        
+        .nav-menu {
+            display: flex; gap: 30px; list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #f7f3ef; text-decoration: none; font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-menu a:hover { color: #f97316; }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: white; padding: 10px 20px; border-radius: 25px;
+            text-decoration: none; font-weight: 600; transition: transform 0.3s ease;
+        }
+        
+        .cta-button:hover { transform: translateY(-2px); }
+
+        /* Main Content & Containers */
+        main {
+            max-width: 1200px; margin: 40px auto; padding: 20px;
+        }
+
+        h1 { color: #f97316; text-align: center; margin-bottom: 40px; font-size: 2.5rem; }
+        
+        /* Form và Box */
+        .management-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        .form-box, .menu-list-box {
+            background: rgba(20, 14, 11, 0.9);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #3b2a22;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        /* Form Styling */
+        form label { display: block; margin-top: 15px; font-weight: 600; color: #f97316; }
+        form input[type="text"], 
+        form input[type="number"],
+        form select,
+        form textarea {
+            width: 100%; padding: 10px; margin-top: 5px;
+            border: 1px solid #5a4b43; border-radius: 6px;
+            background-color: #2c1e19; color: #f7f3ef;
+            font-size: 1rem;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            display: block; width: 100%;
+            background-color: #f97316; color: #140e0b;
+            padding: 12px 20px; border: none; border-radius: 6px;
+            font-size: 1.1rem; font-weight: 700; cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            margin-top: 25px;
+        }
+
+        .btn-primary:hover { background-color: #ff9d4d; }
+        .btn-primary:active { transform: scale(0.98); }
+
+        /* Table Styling */
+        table {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px; text-align: left;
+            border-bottom: 1px solid #3b2a22;
+        }
+
+        th {
+            background-color: #3b2a22; color: #f97316;
+            font-weight: 700;
+        }
+        
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background-color: rgba(249, 115, 22, 0.1); }
+        
+        /* Action Buttons in Table */
+        .btn-action {
+            padding: 6px 10px; margin-left: 5px; border: none; border-radius: 4px;
+            cursor: pointer; font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn-delete { background-color: #dc2626; color: white; }
+        .btn-delete:hover { background-color: #ef4444; }
+
+        .btn-edit-price { background-color: #10b981; color: white; }
+        .btn-edit-price:hover { background-color: #34d399; }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .management-container {
+                grid-template-columns: 350px 1fr;
+            }
+        }
+        
+        /* Modal Style for Price Update */
+        .modal {
+            display: none; position: fixed; z-index: 1; 
+            left: 0; top: 0; width: 100%; height: 100%;
+            overflow: auto; background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #2c1e19; margin: 5% auto; 
+            padding: 20px; border: 1px solid #f97316; 
+            width: 80%; max-width: 400px; border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(249, 115, 22, 0.4);
+        }
+        .close-btn { color: #f97316; float: right; font-size: 28px; font-weight: bold; }
+        .close-btn:hover, .close-btn:focus { color: #ff9d4d; text-decoration: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="../img/logo_nha_hang.png" alt="Logo nhà hàng">
+                <span id="restaurant-name">Nhà hàng</span>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="./homepage.html">Trang chủ</a></li>
+                    <li><a href="./menu_management.html">Menu</a></li>
+                    <li><a href="./homepage.html">Giới thiệu</a></li>
+                    <li><a href="./homepage.html">Liên hệ</a></li>
+                    <li><a href="./order.html">Đặt bàn</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <h1>Quản Lý Menu</h1>
+
+        <div class="management-container">
+            <!-- 1. Form Thêm Món Mới -->
+            <div class="form-box">
+                <h2>Thêm Món Mới</h2>
+                <form id="add-menu-form">
+                    <label for="name">Tên món:</label>
+                    <input type="text" id="name" required>
+
+                    <label for="price">Giá (VNĐ):</label>
+                    <input type="number" id="price" min="1000" required>
+
+                    <label for="category">Danh mục:</label>
+                    <select id="category" required>
+                        <option value="Khai vị">Khai vị</option>
+                        <option value="Món chính">Món chính</option>
+                        <option value="Tráng miệng">Tráng miệng</option>
+                        <option value="Đồ uống">Đồ uống</option>
+                        <option value="Hải sản">Hải sản</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                    <button type="submit" class="btn-primary">➕ Thêm vào Menu</button>
+                </form>
+            </div>
+
+            <!-- 2. Bảng Danh sách Menu -->
+            <div class="menu-list-box">
+                <h2>Danh sách Món ăn</h2>
+                <table id="menu-items">
+                <thead>
+                    <tr>
+                        <th>Tên món</th>
+                        <th>Giá</th>
+                        <th>Danh mục</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="menuItems"></tbody>
+            </table>
+            </div>
+        </div>
+    </main>
+    <div id="price-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Chỉnh sửa giá</h3>
+            <p id="modal-item-name"></p>
+            <form id="update-price-form">
+                <input type="hidden" id="modal-item-id">
+                <label for="new-price">Giá mới (VNĐ):</label>
+                <input type="number" id="new-price" min="1000" required>
+                <button type="submit" class="btn-primary">Cập nhật Giá</button>
+            </form>
+        </div>
+    </div>
+    <script type="module">
+        import Restaurant from './Restaurant.js';
+        import Order from './Order.js';
+        import { MENU_ITEMS } from './data.js';
+
+        const restaurantName = localStorage.getItem('restaurantName') || 'Nhà hàng';
+        document.getElementById('restaurant-name').textContent = restaurantName;
+
+        const initialMenuItems = MENU_ITEMS;
+        let menuItems = JSON.parse(localStorage.getItem('menuItems')) || initialMenuItems;
+
+        function saveMenuToLocalStorage() {
+            localStorage.setItem('menuItems', JSON.stringify(menuItems));
+        }
+
+        // Load menu list
+        const menuItemsTbody = document.getElementById('menuItems');
+        const addForm = document.getElementById('add-menu-form');
+        const updateForm = document.getElementById('update-price-form');
+        const modal = document.getElementById('price-modal');
+        const closeBtn = document.querySelector('.close-btn');
+        const modalItemName = document.getElementById('modal-item-name');
+        const modalItemId = document.getElementById('modal-item-id');
+        const newPriceInput = document.getElementById('new-price');
+
+        function renderMenu() {
+            menuItemsTbody.innerHTML = '';
+            menuItems.forEach((item, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${item.price.toLocaleString()}₫</td>
+                    <td>${item.category}</td>
+                    <td>
+                        <button class="btn-action btn-edit-price" data-idx="${idx}">Sửa</button>
+                        <button class="btn-action btn-delete" data-idx="${idx}">Xóa</button>
+                    </td>
+                `;
+                menuItemsTbody.appendChild(tr);
+            });
+        }
+
+        // Event delegation for action buttons
+        menuItemsTbody.addEventListener('click', (e) => {
+            if (e.target.matches('.btn-edit-price')) {
+                const idx = parseInt(e.target.dataset.idx);
+                const item = menuItems[idx];
+                modalItemName.textContent = item.name;
+                modalItemId.value = idx;
+                newPriceInput.value = item.price;
+                modal.style.display = 'block';
+            } else if (e.target.matches('.btn-delete')) {
+                const idx = parseInt(e.target.dataset.idx);
+                if (confirm(`Bạn có chắc chắn muốn xóa món "${menuItems[idx].name}"?`)) {
+                    menuItems.splice(idx, 1);
+                    saveMenuToLocalStorage();
+                    renderMenu();
+                }
+            }
+        });
+
+        // Add new item
+        addForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const price = parseInt(document.getElementById('price').value);
+            const category = document.getElementById('category').value;
+            if (name && price >= 1000) {
+                menuItems.push({ name, price, category });
+                saveMenuToLocalStorage();
+                addForm.reset();
+                renderMenu();
+            }
+        });
+
+        // Update price
+        updateForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const idx = parseInt(modalItemId.value);
+            const newPrice = parseInt(newPriceInput.value);
+            if (newPrice >= 1000) {
+                menuItems[idx].price = newPrice;
+                saveMenuToLocalStorage();
+                modal.style.display = 'none';
+                renderMenu();
+            }
+        });
+
+        // Close modal
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        renderMenu();
+    </script>
+</body>
+</html>
